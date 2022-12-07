@@ -16,7 +16,7 @@ class WeatherRemoteDataSourcesImpl implements WeatherRemoteDataSources {
   @override
   Future<List<WeatherModel>> getWeather() async {
     final url = Uri.parse(
-        'http://api.openweathermap.org/data/2.5/forecast?q=Paris&appid=dee289b80fdd49885faa859de577449d');
+        'http://api.openweathermap.org/data/2.5/forecast?q=Paris&appid=toto');
     final response = await client.get(
       url,
       headers: {
