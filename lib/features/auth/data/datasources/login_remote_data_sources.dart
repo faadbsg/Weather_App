@@ -8,9 +8,9 @@ abstract class LoginRemoteDataSources {
 class LoginRemoteDataSourcesImpl implements LoginRemoteDataSources {
   @override
   Future<UserAuthModel> getLogin(String email, String password) async {
-    if ((email == 'harrypotter@test.com') && (password == 'test')) {
+    if ((email == 'test@test.com') && (password == 'test')) {
       return UserAuthModel(
-        emailModel: 'harrypotter@test.com',
+        emailModel: 'test@test.com',
         passwordModel: 'test',
         usernameModel: 'Harry',
       );

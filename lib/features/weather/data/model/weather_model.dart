@@ -1,33 +1,37 @@
+import 'package:intl/intl.dart';
 import 'package:weather_app/features/weather/domain/entity/weather_entity.dart';
 
 class WeatherModel {
-  final String dateModel;
-  final double weatherDayModel;
-  final String weatherIconModel;
-  final String weatherDescritpionModel;
+  final String date;
+  final double kelvinTemperature;
+  final String weatherIconCode;
+  final String weatherDescritpion;
 
   WeatherModel({
-    required this.dateModel,
-    required this.weatherDayModel,
-    required this.weatherIconModel,
-    required this.weatherDescritpionModel,
+    required this.date,
+    required this.kelvinTemperature,
+    required this.weatherIconCode,
+    required this.weatherDescritpion,
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return WeatherModel(
-      dateModel: json['dt_txt'] as String,
-      weatherDayModel: json['main']['temp'] as double,
-      weatherIconModel: json['weather'][0]['icon'] as String,
-      weatherDescritpionModel: json['weather'][0]['description'] as String,
+      date: json['dt_txt'] as String,
+      kelvinTemperature: (json['main']['temp'] as num).toDouble(),
+      weatherIconCode: json['weather'][0]['icon'] as String,
+      weatherDescritpion: json['weather'][0]['description'] as String,
     );
   }
 
   WeatherEntity toWeatherEntity() {
+    final dateParsed = DateTime.parse(date);
+    final formatedDate = DateFormat('dd/MM HH:mm').format(dateParsed);
+    final tempKelvinToCelsius = kelvinTemperature - 273.15;
     return WeatherEntity(
-      date: dateModel,
-      weatherDay: weatherDayModel,
-      weatherIcon: weatherIconModel,
-      weatherDescritpion: weatherDescritpionModel,
+      date: formatedDate,
+      temperatureCelsius: tempKelvinToCelsius,
+      iconCode: weatherIconCode,
+      weatherDescritpion: weatherDescritpion,
     );
   }
 }

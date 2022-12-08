@@ -8,6 +8,8 @@ abstract class WeatherRemoteDataSources {
   Future<List<WeatherModel>> getWeather();
 }
 
+const String apiKey = 'dee289b80fdd49885faa859de577449d';
+
 class WeatherRemoteDataSourcesImpl implements WeatherRemoteDataSources {
   final http.Client client;
 
@@ -16,7 +18,7 @@ class WeatherRemoteDataSourcesImpl implements WeatherRemoteDataSources {
   @override
   Future<List<WeatherModel>> getWeather() async {
     final url = Uri.parse(
-        'http://api.openweathermap.org/data/2.5/forecast?q=Paris&appid=toto');
+        'http://api.openweathermap.org/data/2.5/forecast?q=Paris&appid=$apiKey');
     final response = await client.get(
       url,
       headers: {
@@ -30,7 +32,7 @@ class WeatherRemoteDataSourcesImpl implements WeatherRemoteDataSources {
           .map((e) => WeatherModel.fromJson(e as Map<String, dynamic>))
           .toList();
       final resultModelsFiltrated = jsonResModels
-          .where((element) => element.dateModel.contains('15'))
+          .where((element) => element.date.contains('15'))
           .toList();
       return resultModelsFiltrated;
     } else {
