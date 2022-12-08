@@ -5,15 +5,15 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text('Loading'),
-            CircularProgressIndicator(),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          Text('Loading'),
+          CircularProgressIndicator(
+            color: Colors.purple,
+          ),
+        ],
       ),
     );
   }

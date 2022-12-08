@@ -5,7 +5,8 @@ import 'package:weather_app/features/auth/data/datasources/login_remote_data_sou
 import 'package:weather_app/features/auth/data/repository/login_repository_impl.dart';
 import 'package:weather_app/features/auth/domain/repository/login_repository.dart';
 import 'package:weather_app/features/auth/domain/usecases/get_login.dart';
-import 'package:weather_app/features/presentation/cubit/weather_app_cubit.dart';
+import 'package:weather_app/features/presentation/cubit/login_cubit.dart';
+import 'package:weather_app/features/presentation/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/data/datasources/weather_remote_datasources.dart';
 import 'package:weather_app/features/weather/data/repository/weather_repository_impl.dart';
 import 'package:weather_app/features/weather/domain/repository/weather_repository.dart';
@@ -15,10 +16,14 @@ import 'package:http/http.dart' as http;
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
-  //Cubit
+  //Cubits
   serviceLocator.registerFactory(
-    () => WeatherAppCubit(
+    () => WeatherCubit(
       getWeather: serviceLocator(),
+    ),
+  );
+  serviceLocator.registerFactory(
+    () => LoginCubit(
       getLogin: serviceLocator(),
     ),
   );
