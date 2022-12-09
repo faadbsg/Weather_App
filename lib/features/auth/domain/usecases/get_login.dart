@@ -11,14 +11,13 @@ class GetLogin implements Usecase<AuthUserEntity, Param> {
 
   @override
   Future<Either<Failure, AuthUserEntity>> call(param) async {
-    return await repositoryLogin.getLogin(
-        param.emailLogin, param.passwordLogin);
+    return await repositoryLogin.getLogin(param.email, param.password);
   }
 }
 
 class Param {
-  final String emailLogin;
-  final String passwordLogin;
+  final String email;
+  final String password;
 
-  Param({required this.emailLogin, required this.passwordLogin});
+  Param({required this.email, required this.password});
 }

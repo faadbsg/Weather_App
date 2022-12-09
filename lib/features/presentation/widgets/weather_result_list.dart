@@ -3,35 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/features/weather/domain/entity/weather_entity.dart';
 
-class DisplayListWeather extends StatefulWidget {
+class WeatherResultList extends StatelessWidget {
   final List<WeatherEntity> weatherList;
+  final VoidCallback onRefresh;
 
-  const DisplayListWeather({
+  const WeatherResultList({
     super.key,
     required this.weatherList,
+    required this.onRefresh,
   });
 
   @override
-  State<DisplayListWeather> createState() => _DisplayListWeatherState();
-}
-
-class _DisplayListWeatherState extends State<DisplayListWeather> {
-  @override
   Widget build(BuildContext context) {
-    final dateRetrieve = DateTime.now();
-    String dateRetrieved = DateFormat("dd/MM - HH:mm:ss").format(dateRetrieve);
+    final dateNow = DateTime.now();
+    final String dateRetrieved = DateFormat("dd/MM - HH:mm:ss").format(dateNow);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {});
-        },
+        onRefresh: () async => onRefresh(),
         child: Column(
           children: [
             const SizedBox(height: 10),
             const Text(
-              'Weather retrieves at the date :',
+              'Paris weather retrieved at:',
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.grey,
@@ -48,12 +43,13 @@ class _DisplayListWeatherState extends State<DisplayListWeather> {
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                  itemCount: widget.weatherList.length,
-                  itemBuilder: ((context, index) {
-                    return _WeatherCard(
-                      weather: widget.weatherList[index],
-                    );
-                  })),
+                itemCount: weatherList.length,
+                itemBuilder: (_, index) {
+                  return _WeatherCard(
+                    weather: weatherList[index],
+                  );
+                },
+              ),
             ),
           ],
         ),

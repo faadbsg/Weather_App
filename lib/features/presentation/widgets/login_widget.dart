@@ -12,7 +12,7 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
-  bool passwordHide = true;
+  bool passwordHidden = true;
 
   @override
   void initState() {
@@ -32,64 +32,62 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextFormField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              border: OutlineInputBorder(),
             ),
-            const SizedBox(height: 10),
-            TextFormField(
-              obscureText: passwordHide,
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: !passwordHide
-                      ? const Icon(Icons.visibility)
-                      : const Icon(Icons.visibility_off),
-                  onPressed: () {
-                    setState(() {
-                      passwordHide = !passwordHide;
-                    });
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple.shade200,
-                ),
-                child: const Text(
-                  'LOGIN',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            obscureText: passwordHidden,
+            keyboardType: TextInputType.visiblePassword,
+            textInputAction: TextInputAction.done,
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(
+                icon: !passwordHidden
+                    ? const Icon(Icons.visibility)
+                    : const Icon(Icons.visibility_off),
                 onPressed: () {
-                  Provider.of<LoginCubit>(context, listen: false)
-                      .launchConnection(
-                    _emailController.text,
-                    _passwordController.text,
-                  );
-                  _emailController.clear();
-                  _passwordController.clear();
+                  setState(() {
+                    passwordHidden = !passwordHidden;
+                  });
                 },
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 50,
+            width: double.infinity,
+            child: ElevatedButton(
+              child: const Text(
+                'Log in',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onPressed: () {
+                context.read<LoginCubit>().login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                _emailController.clear();
+                _passwordController.clear();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -7,11 +7,11 @@ import 'package:weather_app/features/auth/domain/entity/auth_user_entity.dart';
 import 'package:weather_app/features/auth/domain/repository/login_repository.dart';
 
 class LoginRepositoryImpl implements LoginRepository {
-  final LoginRemoteDataSources remoteDataSourcesLogin;
+  final LoginRemoteDataSource loginRemoteDataSource;
   final NetworkInfo networkInfo;
 
   LoginRepositoryImpl({
-    required this.remoteDataSourcesLogin,
+    required this.loginRemoteDataSource,
     required this.networkInfo,
   });
   @override
@@ -20,15 +20,14 @@ class LoginRepositoryImpl implements LoginRepository {
     if (await networkInfo.isConnected) {
       try {
         final userloginModel =
-            await remoteDataSourcesLogin.getLogin(emailLogin, passwordLogin);
+            await loginRemoteDataSource.getLogin(emailLogin, passwordLogin);
         final userLogin = userloginModel.toAuthUser();
         return Right(userLogin);
       } on LoginException {
-        return const Left(
-            LoginFailure(errorMsg: 'Email or Password invalid !'));
+        return const Left(LoginFailure(errorMsg: 'email or password invalid!'));
       }
     } else {
-      return const Left(ServerFailure(errorMsg: 'Failed server'));
+      return const Left(ServerFailure(errorMsg: 'server failed!'));
     }
   }
 }

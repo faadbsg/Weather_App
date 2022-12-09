@@ -46,8 +46,7 @@ Future<void> init() async {
   //Login
   serviceLocator.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(
-        remoteDataSourcesLogin: serviceLocator(),
-        networkInfo: serviceLocator()),
+        loginRemoteDataSource: serviceLocator(), networkInfo: serviceLocator()),
   );
 
   //------------Datasources
@@ -55,7 +54,7 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<WeatherRemoteDataSources>(
       () => WeatherRemoteDataSourcesImpl(client: serviceLocator()));
   //Login
-  serviceLocator.registerLazySingleton<LoginRemoteDataSources>(
+  serviceLocator.registerLazySingleton<LoginRemoteDataSource>(
       () => LoginRemoteDataSourcesImpl());
 
   //------------External

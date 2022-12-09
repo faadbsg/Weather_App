@@ -4,38 +4,28 @@ import 'package:weather_app/features/presentation/cubit/login_cubit.dart';
 import 'package:weather_app/features/presentation/cubit/weather_cubit.dart';
 import 'package:weather_app/features/presentation/page/weather_page.dart';
 import 'package:weather_app/features/presentation/widgets/login_widget.dart';
+import 'package:weather_app/features/weather/domain/usecase/get_weather.dart';
 import 'package:weather_app/injection_container.dart' as di;
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  String nameUser = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.purple.shade200,
         title: const Text(
-          'LOGIN',
+          'Log in',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
       body: BlocConsumer<LoginCubit, LoginState>(
         builder: (context, state) {
-          if (state is LoginInitialState) {
-            return const LoginWidget();
-          } else {
-            throw '';
-          }
+          return const LoginWidget();
         },
         buildWhen: (previous, current) {
           if (current is LoginErrorState || current is LoginCompletedState) {
@@ -45,33 +35,54 @@ class _LoginPageState extends State<LoginPage> {
         },
         listener: (parentContext, state) {
           if (state is LoginErrorState) {
-            showDialog(
-                context: parentContext,
-                builder: (context) {
-                  return displayAlerError(
-                    state.errorMsg,
-                    context,
-                    (() {
-                      parentContext.read<LoginCubit>().goBackLogin();
-                    }),
-                  );
-                });
+            _showErrorLogin(parentContext, state);
           }
           if (state is LoginCompletedState) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                      create: (context) =>
-                          WeatherCubit(getWeather: di.serviceLocator()),
-                      child: WeatherPage(username: state.username),
-                    )));
+            _goToWeatherPage(context, state);
           }
         },
       ),
     );
   }
 
-  Widget displayAlerError(
-      String stateError, BuildContext context, VoidCallback onOKPressed) {
+  Future<void> _showErrorLogin(
+      BuildContext parentContext, LoginErrorState state) {
+    return showDialog(
+        context: parentContext,
+        builder: (_) {
+          return displayAlerError(
+            stateError: state.errorMsg,
+            context: parentContext,
+            onOKPressed: () {
+              parentContext.read<LoginCubit>().resetState();
+            },
+          );
+        });
+  }
+
+  void _goToWeatherPage(BuildContext context, LoginCompletedState state) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider<WeatherCubit>(
+          create: (_) => WeatherCubit(
+            getWeather: di.serviceLocator<GetWeather>(),
+          ),
+          child: WeatherPage(
+            username: state.username,
+            onLogoutPressed: () {
+              context.read<LoginCubit>().resetState();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget displayAlerError({
+    required String stateError,
+    required BuildContext context,
+    required VoidCallback onOKPressed,
+  }) {
     return AlertDialog(
       title: Text(stateError),
       actions: [
@@ -79,7 +90,6 @@ class _LoginPageState extends State<LoginPage> {
           child: const Text('OK'),
           onPressed: () {
             onOKPressed();
-            // context.read<LoginCubit>().goBackLogin();
             Navigator.pop(context);
           },
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/features/auth/domain/usecases/get_login.dart';
 import 'package:weather_app/features/presentation/cubit/login_cubit.dart';
 import 'package:weather_app/features/presentation/page/login_page.dart';
 import 'package:weather_app/injection_container.dart' as di;
@@ -15,11 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: ((context) => LoginCubit(getLogin: di.serviceLocator()))),
-      ],
+    return BlocProvider(
+      create: (context) => LoginCubit(getLogin: di.serviceLocator<GetLogin>()),
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: LoginPage(),

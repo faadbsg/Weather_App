@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:weather_app/features/weather/domain/entity/weather_entity.dart';
@@ -7,12 +8,12 @@ part 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
   WeatherCubit({required this.getWeather}) : super(WeatherInitialState()) {
-    launchWeatherRequest();
+    fetchWeather();
   }
 
   final GetWeather getWeather;
 
-  Future<void> launchWeatherRequest() async {
+  Future<void> fetchWeather() async {
     emit(WeatherLoadingState());
     final weatherOrFailure = await getWeather.call();
     weatherOrFailure.fold(

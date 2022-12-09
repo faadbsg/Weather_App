@@ -3,26 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/features/presentation/cubit/login_cubit.dart';
 import 'package:weather_app/features/presentation/cubit/weather_cubit.dart';
-import 'package:weather_app/features/presentation/widgets/display_list_weather.dart';
+import 'package:weather_app/features/presentation/widgets/weather_result_list.dart';
 import 'package:weather_app/features/presentation/widgets/loading_widget.dart';
 
-class WeatherPage extends StatefulWidget {
-  const WeatherPage({super.key, required this.username});
+class WeatherPage extends StatelessWidget {
+  const WeatherPage({
+    super.key,
+    required this.username,
+    required this.onLogoutPressed,
+  });
   final String username;
+  final VoidCallback onLogoutPressed;
 
-  @override
-  State<WeatherPage> createState() => _WeatherPageState();
-}
-
-class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple.shade200,
+        leading: const SizedBox.shrink(),
         centerTitle: true,
         title: Text(
-          'Welcome ${widget.username}',
+          'Welcome $username',
           style: TextStyle(
             color: Colors.grey[200],
             fontSize: 20,
@@ -36,7 +36,7 @@ class _WeatherPageState extends State<WeatherPage> {
               color: Colors.grey[300],
             ),
             onPressed: () {
-              Provider.of<LoginCubit>(context, listen: false).goBackLogin();
+              Provider.of<LoginCubit>(context, listen: false).resetState();
               Navigator.pop(context);
             },
           )
@@ -49,12 +49,12 @@ class _WeatherPageState extends State<WeatherPage> {
               showDialog(
                 context: context,
                 builder: ((context) {
-                  return displayAlerError(state);
+                  return _buildAlertDialog(state: state, context: context);
                 }),
               );
             }
           }),
-          buildWhen: (previous, current) {
+          buildWhen: (_, current) {
             if (current is WeatherErrorState) {
               return false;
             }
@@ -66,27 +66,34 @@ class _WeatherPageState extends State<WeatherPage> {
             } else if (state is WeatherLoadingState) {
               return const LoadingWidget();
             } else if (state is WeatherLoadedState) {
-              return DisplayListWeather(weatherList: state.weatherList);
+              return WeatherResultList(
+                weatherList: state.weatherList,
+                onRefresh: () {
+                  context.read<WeatherCubit>().fetchWeather();
+                },
+              );
             } else {
-              throw '';
+              return const SizedBox.shrink();
             }
           },
         ),
       ),
     );
   }
-}
 
-AlertDialog displayAlerError(WeatherErrorState state) {
-  return AlertDialog(
-    title: Text(state.errorWeather),
-    actions: [
-      ElevatedButton(
-        child: const Text('OK'),
-        onPressed: () {
-          //appel méthode cubit pour retour login page
-        },
-      ),
-    ],
-  );
+  AlertDialog _buildAlertDialog(
+      {required WeatherErrorState state, required BuildContext context}) {
+    return AlertDialog(
+      title: Text(state.errorWeather),
+      actions: [
+        ElevatedButton(
+          child: const Text('OK'),
+          onPressed: () {
+            onLogoutPressed();
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
 }

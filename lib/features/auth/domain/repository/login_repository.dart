@@ -5,5 +5,5 @@ import '../entity/auth_user_entity.dart';
 
 abstract class LoginRepository {
   Future<Either<Failure, AuthUserEntity>> getLogin(
-      String emailLogin, String passwordLogin);
+      String email, String password);
 }

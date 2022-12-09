@@ -10,9 +10,7 @@ class LoadingWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: const <Widget>[
           Text('Loading'),
-          CircularProgressIndicator(
-            color: Colors.purple,
-          ),
+          CircularProgressIndicator(),
         ],
       ),
     );
