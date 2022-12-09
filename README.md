@@ -1,6 +1,6 @@
 # 📱 Weather App
 This project was implemented in flutter.
-This app display the weather in Paris for the next 5 days.
+This app displays the weather in Paris for the next 5 days.
 
 ## Demo
 ### Email invalid, login, logout
@@ -12,8 +12,8 @@ https://user-images.githubusercontent.com/100363875/206656617-b17acd03-172c-48f6
 
 ## How to build the app
 ### Important to have before
-- The supported flutter version is 3.0.0 and above
-- The supported dart version is 2.17.0 and above
+- The supported flutter version of the project is 3.0.0 and above
+- The supported dart version of the project is 2.17.0 and above
 
 ### Let's build the app
 💻 After recovering the project:
