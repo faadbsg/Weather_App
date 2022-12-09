@@ -10,6 +10,13 @@ https://user-images.githubusercontent.com/100363875/206654487-f7575156-9e8e-498e
 ### Connection failed
 https://user-images.githubusercontent.com/100363875/206656617-b17acd03-172c-48f6-8f9e-2e3d7dddb455.mp4
 
+## :notebook: Features
+- Authentification
+- Weather display via API Rest
+- Error handling
+- Refreshment of the weather
+- Display the date of the refreshment
+
 ## How to build the app
 ### Important to have before
 - The supported flutter version of the project is 3.0.0 and above
