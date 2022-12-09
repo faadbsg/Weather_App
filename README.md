@@ -25,7 +25,7 @@ https://user-images.githubusercontent.com/100363875/206656617-b17acd03-172c-48f6
 ### Let's build the app
 💻 After recovering the project:
 - Enter the command "flutter pub get" to get dependencies of flutter app
-- Enter the commande "flutter run" to run the app
+- Enter the command "flutter run" to run the app
 
 🔐 To log in:
 - email: test@test.com
